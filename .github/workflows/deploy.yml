@@ -1,8 +1,8 @@
 name: Build and deploy to GitHub Pages
 
 on:
-  - push
-  - pull_request
+  push:
+    branches: [master]
 
 jobs:
   install:
@@ -13,9 +13,6 @@ jobs:
         with:
           version: 7.18.1
 
-on:
-  push:
-    branches: [master]
 
 jobs:
   build-and-deploy:
