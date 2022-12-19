@@ -5,16 +5,6 @@ on:
     branches: [master]
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 7.18.1
-
-
-jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -30,4 +20,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
           branch: gh-pages
-          folder: build
+          folder: dist
