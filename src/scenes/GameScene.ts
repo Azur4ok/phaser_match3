@@ -15,7 +15,7 @@ export class GameScene extends Scene {
   public constructor() {
     super('game-scene')
   }
-
+  //eslint-ignore-next-line
   private create(): void {
     this.drawField()
     this.input.on('pointerdown', this.handleSelectItem, this)
