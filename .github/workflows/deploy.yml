@@ -13,6 +13,7 @@ jobs:
 
       - name: Install, build 🔧
         run: |
+          npm install -g pnpm
           pnpm install
           pnpm  build
 
