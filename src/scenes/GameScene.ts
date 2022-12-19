@@ -1,6 +1,7 @@
 import { Scene } from 'phaser'
 import { directionType, GameItem, gameOptions } from '../constants'
 import { imageNames } from './../constants/index'
+
 export class GameScene extends Scene {
   private pickState: boolean = true
   private isDragging: boolean = false
@@ -25,8 +26,8 @@ export class GameScene extends Scene {
   private handleSelectItem(pointer: Phaser.Input.Pointer): void {
     if (this.pickState) {
       this.isDragging = true
-      const row = Math.floor(pointer.x / gameOptions.imageSize)
-      const column = Math.floor(pointer.y / gameOptions.imageSize)
+      const row = Math.floor(pointer.y / gameOptions.imageSize)
+      const column = Math.floor(pointer.x / gameOptions.imageSize)
       let pickedItem = this.itemAt(row, column)
       if (pickedItem !== -1) {
         if (!this.selectedItem) {
@@ -129,7 +130,7 @@ export class GameScene extends Scene {
               removed--
               this.gameArray[i][j].sprite.visible = false
               this.poolArray.push(this.gameArray[i][j].sprite)
-              if (removed === 0) {
+              if (!removed) {
                 this.makeItemsFall()
                 this.replenishField()
               }
@@ -230,7 +231,7 @@ export class GameScene extends Scene {
       for (let j = 0; j < gameOptions.fieldSize; j++) {
         if (!this.gameArray[i][j].isEmpty) {
           const fallItems = this.emptyBelow(i, j)
-          if (fallItems > 0) {
+          if (fallItems) {
             this.tweens.add({
               targets: this.gameArray[i][j].sprite,
               y: this.gameArray[i][j].sprite.y + fallItems * gameOptions.imageSize,
@@ -289,7 +290,7 @@ export class GameScene extends Scene {
     }
   }
 
-  private matchInBoard() {
+  private matchInBoard(): boolean {
     for (let i = 0; i < gameOptions.fieldSize; i++) {
       for (let j = 0; j < gameOptions.fieldSize; j++) {
         if (this.isMatch(i, j)) {

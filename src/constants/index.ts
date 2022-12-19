@@ -19,11 +19,4 @@ export const gameOptions = {
   destroySpeed: 200,
 }
 
-export const imagesUrl = {
-  img0: 'helmlok',
-  img1: 'skully',
-  img2: 'flowerTop',
-  img3: 'eggHead',
-}
-
-export const imageNames = Object.values(imagesUrl)
+export const imageNames = ['helmlok', 'skully', 'flowerTop', 'eggHead']
