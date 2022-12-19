@@ -1,0 +1,95 @@
+{
+  "frames": {
+    "helmlok": {
+      "frame": {
+        "x": 15,
+        "y": 15,
+        "w": 69,
+        "h": 100
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 69,
+        "h": 100
+      },
+      "sourceSize": {
+        "w": 69,
+        "h": 100
+      }
+    },
+    "skully": {
+      "frame": {
+        "x": 114,
+        "y": 15,
+        "w": 100,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 106
+      }
+    },
+    "flowerTop": {
+      "frame": {
+        "x": 244,
+        "y": 15,
+        "w": 100,
+        "h": 110
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 110
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 110
+      }
+    },
+    "eggHead": {
+      "frame": {
+        "x": 374,
+        "y": 15,
+        "w": 100,
+        "h": 111
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 111
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 111
+      }
+    }
+  },
+  "meta": {
+    "app": "http://www.codeandweb.com/texturepacker",
+    "version": "1.0",
+    "image": "spritesheet.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 489,
+      "h": 141
+    },
+    "scale": "1"
+  }
+}
