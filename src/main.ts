@@ -6,8 +6,8 @@ const scaleObject: Phaser.Types.Core.ScaleConfig = {
   mode: Phaser.Scale.FIT,
   autoCenter: Phaser.Scale.CENTER_BOTH,
   parent: 'app',
-  width: 1000,
-  height: 800,
+  width: 770,
+  height: 780,
 }
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
