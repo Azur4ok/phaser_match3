@@ -360,6 +360,9 @@ export class GameScene extends Phaser.Scene {
           this.tutorialCoverGraphic.clear()
           this.hasTutorialEnded = true
           this.tutorialCoverGraphic.destroy()
+          this.input.on('pointerdown', this.handleSelectItem, this)
+          this.input.on('pointermove', this.handleStartSwap, this)
+          this.input.on('pointerup', this.handleStopSwap, this)
         },
       })
       this.tweens.add({
@@ -375,8 +378,6 @@ export class GameScene extends Phaser.Scene {
     for (let i = 0; i < gameOptions.fieldSize; i++) {
       this.removeMap[i] = []
       for (let j = 0; j < gameOptions.fieldSize; j++) {
-        this.gameArray[i][j].sprite.setInteractive()
-        this.input.setDraggable(this.gameArray[i][j].sprite.setInteractive())
         this.removeMap[i].push(0 as never)
       }
     }
