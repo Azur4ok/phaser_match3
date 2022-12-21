@@ -1,9 +1,16 @@
-import { Scene } from 'phaser'
-import { directionType, GameItem, gameOptions } from '../constants'
+import {
+  directionType,
+  GameItem,
+  gameOptions,
+  initialField,
+  TEXT_ANIMATION,
+  TEXT_CONFIG,
+} from '../constants'
 import { imageNames } from './../constants/index'
 
-export class GameScene extends Scene {
+export class GameScene extends Phaser.Scene {
   private pickState: boolean = true
+  private hasTutorialEnded: boolean = false
   private isDragging: boolean = false
   private selectedItem: GameItem | null = null
   private gameArray: GameItem[][] = []
@@ -11,16 +18,24 @@ export class GameScene extends Scene {
   private itemGroup!: Phaser.GameObjects.Group
   private swappingItems: number = 0
   private removeMap: [][] = []
+  private tutorialCoverGraphic!: Phaser.GameObjects.Graphics
+  private tutorialText!: Phaser.GameObjects.Text
 
   public constructor() {
     super('game-scene')
   }
-  //eslint-ignore-next-line
+
   private create(): void {
     this.drawField()
-    this.input.on('pointerdown', this.handleSelectItem, this)
-    this.input.on('pointermove', this.handleStartSwap, this)
-    this.input.on('pointerup', this.handleStopSwap, this)
+
+    this.gameArray[4][2].sprite.setInteractive()
+    this.gameArray[4][3].sprite.setInteractive()
+    this.input.setDraggable(this.gameArray[4][2].sprite)
+    this.input.setDraggable(this.gameArray[4][3].sprite)
+
+    this.input.on('dragstart', this.handleSelectItem, this)
+    this.input.on('drag', this.handleStartSwap, this)
+    this.input.on('dragend', this.handleStopSwap, this)
   }
 
   private handleSelectItem(pointer: Phaser.Input.Pointer): void {
@@ -96,23 +111,56 @@ export class GameScene extends Scene {
     for (let i = 0; i < gameOptions.fieldSize; i++) {
       this.gameArray[i] = []
       for (let j = 0; j < gameOptions.fieldSize; j++) {
+        const randomType = initialField[i][j]
         const item = this.add.sprite(
           gameOptions.imageSize * j + gameOptions.imageSize / 2,
           gameOptions.imageSize * i + gameOptions.imageSize / 2,
           'items',
         )
+        item.setFrame(randomType)
+        this.gameArray[i][j] = { imageType: randomType, sprite: item, isEmpty: false }
         this.itemGroup.add(item)
-        do {
-          const randomType = imageNames[Math.floor(Math.random() * imageNames.length)]
-          item.setFrame(randomType)
-          this.gameArray[i][j] = {
-            imageType: randomType,
-            sprite: item,
-            isEmpty: false,
-          }
-        } while (this.isMatch(i, j))
       }
     }
+    this.tutorialCoverGraphic = this.add.graphics()
+    this.tutorialCoverGraphic.alpha = 0.7
+    this.tutorialCoverGraphic.fillStyle(0x333333)
+    this.tutorialCoverGraphic.fillRect(0, 0, 770, 2 * gameOptions.imageSize)
+    this.tutorialCoverGraphic.fillRect(
+      0,
+      2 * gameOptions.imageSize,
+      3 * gameOptions.imageSize,
+      2 * gameOptions.imageSize,
+    )
+    this.tutorialCoverGraphic.fillRect(
+      0,
+      4 * gameOptions.imageSize,
+      2 * gameOptions.imageSize,
+      gameOptions.imageSize,
+    )
+    this.tutorialCoverGraphic.fillRect(
+      4 * gameOptions.imageSize,
+      2 * gameOptions.imageSize,
+      770 - gameOptions.imageSize,
+      2 * gameOptions.imageSize,
+    )
+    this.tutorialCoverGraphic.fillRect(
+      4 * gameOptions.imageSize,
+      4 * gameOptions.imageSize,
+      4 * gameOptions.imageSize,
+      gameOptions.imageSize,
+    )
+    this.tutorialCoverGraphic.fillRect(0, 5 * gameOptions.imageSize, 770, 5 * gameOptions.imageSize)
+
+    this.tutorialText = this.add.text(
+      TEXT_CONFIG.x,
+      TEXT_CONFIG.y,
+      TEXT_CONFIG.text,
+      TEXT_CONFIG.textStyle,
+    )
+
+    TEXT_ANIMATION.targets = this.tutorialText
+    this.tweens.add(TEXT_ANIMATION)
   }
 
   private removeItems(): void {
@@ -302,9 +350,33 @@ export class GameScene extends Scene {
   }
 
   private handleMatches(): void {
+    if (!this.hasTutorialEnded) {
+      this.tweens.add({
+        targets: this.tutorialCoverGraphic,
+        alpha: 0,
+        ease: 'None',
+        duration: gameOptions.swapSpeed,
+        onComplete: () => {
+          this.tutorialCoverGraphic.clear()
+          this.hasTutorialEnded = true
+          this.tutorialCoverGraphic.destroy()
+        },
+      })
+      this.tweens.add({
+        targets: this.tutorialText,
+        alpha: 0,
+        duration: gameOptions.swapSpeed,
+        onComplete: () => {
+          this.tutorialText.destroy()
+          console.log('tutorial has ended')
+        },
+      })
+    }
     for (let i = 0; i < gameOptions.fieldSize; i++) {
       this.removeMap[i] = []
       for (let j = 0; j < gameOptions.fieldSize; j++) {
+        this.gameArray[i][j].sprite.setInteractive()
+        this.input.setDraggable(this.gameArray[i][j].sprite.setInteractive())
         this.removeMap[i].push(0 as never)
       }
     }
